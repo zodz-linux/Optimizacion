@@ -94,3 +94,27 @@ def MetodoSeccionDorada(a,b,epsilon,f):
             bw=w1
         lw=bw-aw
     return (w1*3,w2*3)
+
+def InterpolacionCuadratica(epsilonX,epsilonY,delta,x1,f):
+    def CalculateValue(x1,x2,x3,f1,f2,f3):
+        a1=(f2-f1)/(x2-x1)
+        a2=(1/(x3-x2))* (((f3-f1)/(x3-x1))-((f2-f1)/(x2-x1)))
+        return  (.5*(x1+x2))-(a1/(2*a2))
+    data=[]
+    data.append([f(x1),x1])
+    x2=x1+delta
+    data.append([f(x2),x2])
+    if data[0][0] > data[1][0]:
+        data.append([f(x1+(2*delta)),(x1+(2*delta))])
+    else:
+        data.append([f(x1-delta),(x1-delta)])
+    data.sort()
+    xb=CalculateValue(data[0][1],data[1][1],data[2][1],data[0][0],data[1][0],data[2][0])
+    data.pop()
+    data.append([f(xb),xb])
+    while (abs(data[0][0]-data[2][0])>epsilonY) or (abs(data[0][1]-data[2][1]) > epsilonX ):
+        data.sort()
+        xb=CalculateValue(data[0][1],data[1][1],data[2][1],data[0][0],data[1][0],data[2][0])
+        data.pop()
+        data.append([f(xb),xb])
+    return  data[2][0],data[2][1]
