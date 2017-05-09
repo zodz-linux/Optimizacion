@@ -2,6 +2,9 @@ import numpy
 import itertools
 
 def direccionesR(n):
+    """
+    n  :  numero de vectores canonicos
+    """
     puntos=[]
     for  i in xrange(1,n):
         tmp=itertools.combinations(range(n),i)
@@ -19,20 +22,13 @@ def direccionesR(n):
 def EVOP(p,delta,epsilon,f):
     ndimension=len(p)
     direcciones=direccionesR(ndimension)
-    iteraciones=0
-    evaluaciones=0
     while delta > epsilon:
         vertices=[[0,list(p+((delta*direccion)))] for direccion in direcciones]
         for v in vertices:
             v[0]=f(v[1])
-            evaluaciones+=1
         vertices.sort()
         if f(p) > vertices[0][0]:
             p= vertices[0][1]
         else:
             delta*=.5
-        evaluaciones+=1
-        iteraciones+=1
-    print "evaluaciones: ",evaluaciones
-    print "iteraciones:  ",iteraciones
     return p
